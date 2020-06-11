@@ -1,20 +1,34 @@
 # Linux Mandatory Access Control
 
-The Linux system has two notable mandatory access control mechanisms [SELinux][1] and [AppArmor][2]. Imagine that we have the following scenario:
+## 安裝及測試方式
 
-1. Program X is installed at /usr/local/bin/px
-2. Only UserX is allowed to execute Program X
-3. Program X will retrieve the source code of Program Y from the Internet and build Program Y under /var/X/
-4. Program X will install Program Y under /var/Y/
-5. Program X will fork a child process to execute Program Y
-6. Program Y is only allowed to read/write files under /var/Y/
-7. Program Y is not allowed to create or accept network connections.
+執行 setup.sh
 
-Use either SELinux or AppArmor to implement least privilege security polciy for the above scenario. In other words, your policy should minimize unnecessary accesses that could be performed by Program X or Program Y.
+    ./setup.sh
 
-For simplicity, you can assume that Program X and Program Y are C/C++ programs that will be compiled into ELF executables (and possibly with a bunch of .so shared libraries).
+## 有環境下直接使用方式
 
-To make the grading process more manageable, please work on your policy from a fresh installed Linux, so that the TA can apply your SELinux policy or AppArmor profile on our testbed for verification.
+將profile放到該放的地方
 
-[1]: https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/selinux_users_and_administrators_guide/index
-[2]: https://wiki.ubuntu.com/AppArmor
+    sudo cp myProfile /etc/apparmor.d/usr.local.bin.px
+
+重啟 apparmor
+
+    sudo service apparmor reload
+  
+將該profile改成enforce mode  
+  
+    sudo aa-enforce /etc/apparmor.d/usr.local.bin.px
+
+把你的programX編過去(下面是我的)
+
+    sudo gcc ProgramX.c -o /usr/local/bin/px
+
+重啟 apparmor
+
+    sudo service apparmor reload
+## reference
+
+https://gitlab.com/apparmor/apparmor/-/wikis/home
+
+https://blog.csdn.net/hanningxue/article/details/78029708
