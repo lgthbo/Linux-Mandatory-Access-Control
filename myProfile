@@ -1,0 +1,54 @@
+# Last Modified: Thu Jun 11 18:56:35 2020
+#include <tunables/global>
+
+/usr/local/bin/px {
+  #include <abstractions/base>
+  #include <abstractions/nameservice>
+  #include <abstractions/user-tmp>
+
+  capability net_raw,
+  capability dac_override,
+  capability fowner,
+
+  network inet raw,
+  network inet6 raw,
+
+  /bin/dash mrix,
+  /bin/ping mrix,
+  /bin/touch mrix,
+  /home/*/.wget-hsts r,
+  /lib/x86_64-linux-gnu/ld-*.so mr,
+  /usr/bin/wget mrix,
+  /usr/bin/x86_64-linux-gnu-as mrix,
+  /usr/bin/x86_64-linux-gnu-gcc-7 mrix,
+  /usr/bin/x86_64-linux-gnu-ld.bfd mrix,
+  /usr/lib/gcc/x86_64-linux-gnu/7/cc1 mrix,
+  /usr/lib/gcc/x86_64-linux-gnu/7/collect2 mrix,
+  /usr/local/bin/px mr,
+  /var/Y/** Cx,
+  owner /etc/wgetrc r,
+  owner /usr/include/* r,
+  owner /usr/include/x86_64-linux-gnu/** r,
+
+  owner /var/X/ rw,
+  owner /var/X/** mrw,
+  owner /var/Y/ rw,
+  owner /var/Y/** mrw,
+
+  profile /var/Y/** {
+    #include <abstractions/base>
+
+    deny network,
+
+    /bin/* mrix,
+    /lib/x86_64-linux-gnu/ld-*.so mr,
+    /usr/bin/** mrix,
+    /usr/lib/gcc/** mrix,
+    /var/Y/ rw,
+    /var/Y/** mrw,
+
+  }
+
+
+
+}
